@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submission Status</title>
+</head>
+<body>
+    {% if success %}
+        <h1>Data successfully added to the database!</h1>
+    {% else %}
+        <h1>Failed to add data to the database.</h1>
+        <p>Please ensure all fields are filled out correctly.</p>
+    {% endif %}
+    <p><a href="/">Go back to the submission form</a></p>
+</body>
+</html>

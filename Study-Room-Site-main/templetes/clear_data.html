@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Data</title>
+</head>
+<body>
+    {% if success %}
+        <h1>Successfully deleted {{ num_deleted }} records from the database!</h1>
+    {% else %}
+        <h1>Failed to clear the database.</h1>
+        <p>Error: {{ error }}</p>
+    {% endif %}
+    <p><a href="/view-data">View Data</a></p>
+    <p><a href="/">Go back to the submission form</a></p>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Room Details</title>
+</head>
+<body>
+    <h1>Room Information</h1>
+    <form action="/submit" method="post">
+        <!-- Room Number Input -->
+        <label for="roomNumber">Room Number:</label>
+        <input type="text" id="roomNumber" name="roomNumber" required>
+        <br><br>
+
+        <!-- Availability Input -->
+        <label for="available">Available:</label>
+        <input type="text" id="available" name="available" required>
+        <br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+    <table>
+        <a href="/clear-data">Clear stored data</a>
+    </table>
+</body>
+</html>

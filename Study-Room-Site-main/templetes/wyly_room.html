@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wyly Rooms - Room Management System</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
+
+        /* Navigation bar styles */
+        .navbar {
+            background-color: #003087;
+            padding: 10px;
+            overflow: hidden;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            display: inline-block;
+        }
+        .navbar a:hover {
+            background-color: #003087;
+        }
+
+        /* Hero section styles */
+        .hero {
+            background-color: #ff0000;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: 3em;
+        }
+        .hero img {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 150px;
+            height: auto;
+        }
+
+        /* Main content styles */
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .content table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+            text-align: center;
+            background-color: #ffffff;
+        }
+        .content th, .content td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        .content th {
+            background-color: #003087;
+            color: white;
+        }
+        .content td {
+            color: black;
+        }
+        .content p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        /* Footer styles */
+        .footer {
+            background-color: #003087;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Styles for the bottom image */
+        .bottom-image {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+    <script>
+        // Function to fetch and update table data
+        async function updateTable() {
+            try {
+                const response = await fetch(window.location.href); // Fetch data from the current page
+                const parser = new DOMParser();
+                const html = parser.parseFromString(await response.text(), "text/html");
+                
+                // Extract the new table body
+                const newTableBody = html.querySelector("tbody").innerHTML;
+
+                // Update the current table body dynamically
+                document.querySelector("tbody").innerHTML = newTableBody;
+            } catch (error) {
+                console.error("Error updating table:", error);
+            }
+        }
+
+        // Refresh the table every 5 seconds
+        setInterval(updateTable, 10000);
+    </script>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="/sudo">Home</a>
+        <a href="/view-data">IESB Rooms</a>
+        <a href="/wyly-room">Wyly Rooms</a>
+    </div>
+
+    <!-- Hero section -->
+    <div class="hero">
+        <h1>Wyly Rooms Availability</h1>
+        <p>Find out which Wyly Rooms are available!</p>
+        <img src="{{ url_for('static', filename='images/La-Tech-Full-logo.jpg') }}" alt="La Tech Full Logo">
+    </div>
+
+    <!-- Main content -->
+    <div class="content">
+        <p>Below is the availability for Wyly Rooms:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Available</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td>{{ item.room_number }}</td>
+                    <td>{{ item.available }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2025 Room Management System. All rights reserved.</p>
+    </div>
+
+    <!-- Bottom Image -->
+    <div class="bottom-image">
+        <img src="{{ url_for('static', filename='images/La-Tech-Logo.png') }}" alt="Bottom Image" width="100">
+    </div>
+</body>
+</html>
