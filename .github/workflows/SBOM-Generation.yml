@@ -21,10 +21,13 @@ jobs:
       - name: Install Syft
         uses: anchore/sbom-action/download-syft@v0
 
+      - name: Build Docker image
+        run: docker build -t my-app:${{ github.sha }} .
+
       - name: Generate SBOM
         run: |
-          syft scan dir:./Study-Room-Site-main \
-            -o cyclonedx-json=sbom.cdx.json
+              syft scan my-app:${{ github.sha }} \
+                -o cyclonedx-json=sbom.cdx.json
 
       - name: Upload SBOM
         uses: actions/upload-artifact@v4
