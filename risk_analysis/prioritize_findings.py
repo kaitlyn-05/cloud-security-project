@@ -246,51 +246,50 @@ def main():
         reverse=True
     )
 
-    # Summary
-    # Summary statistics
+   # Summary statistics
 	severity_counts = Counter(
-    		item["severity"] for item in results
+    	item["severity"] for item in results
 	)
 
 	scanner_counts = Counter()
 
 	for finding in results:
-    		for scanner in finding["scanners"]:
-        		scanner_counts[scanner] += 1
+    	for scanner in finding["scanners"]:
+        	scanner_counts[scanner] += 1
 
 	agreement_count = sum(
-    		item["scanner_agreement"] for item in results
+    	item["scanner_agreement"] for item in results
 	)
 
 	fix_available_count = sum(
-    		bool(item["fixed_versions"]) for item in results
+    	bool(item["fixed_versions"]) for item in results
 	)
 
 	sbom_match_count = sum(
-    		item["in_sbom"] for item in results
+    	item["in_sbom"] for item in results
 	)
 
 	risk_scores = [
-    		item["risk_score"] for item in results
+    	item["risk_score"] for item in results
 	]
 
 	summary = {
-    		"grype_matches": len(grype_data.get("matches", [])),
-    		"trivy_result_sections": len(trivy_data.get("Results", [])),
-    		"unique_combined_findings": len(results),
-    		"unique_cve_ids": len(set(item["cve"] for item in results)),
-  		 "detected_by_both_scanners": agreement_count,
-   		 "grype_findings": scanner_counts["Grype"],
-   		 "trivy_findings": scanner_counts["Trivy"],
-   		 "fix_version_reported": fix_available_count,
-   		 "sbom_components": component_count,
-   		 "findings_matched_to_sbom": sbom_match_count,
-   		 "severity_counts": dict(severity_counts),
-   		 "risk_score_minimum": min(risk_scores) if risk_scores else 0,
-   		 "risk_score_maximum": max(risk_scores) if risk_scores else 0,
-   		 "risk_score_average": round(
-       		 sum(risk_scores) / len(risk_scores), 2
-   		 ) if risk_scores else 0
+    	"grype_matches": len(grype_data.get("matches", [])),
+    	"trivy_result_sections": len(trivy_data.get("Results", [])),
+    	"unique_combined_findings": len(results),
+    	"unique_cve_ids": len(set(item["cve"] for item in results)),
+    	"detected_by_both_scanners": agreement_count,
+    	"grype_findings": scanner_counts["Grype"],
+    	"trivy_findings": scanner_counts["Trivy"],
+    	"fix_version_reported": fix_available_count,
+    	"sbom_components": component_count,
+    	"findings_matched_to_sbom": sbom_match_count,
+    	"severity_counts": dict(severity_counts),
+    	"risk_score_minimum": min(risk_scores) if risk_scores else 0,
+    	"risk_score_maximum": max(risk_scores) if risk_scores else 0,
+    	"risk_score_average": round(
+        	sum(risk_scores) / len(risk_scores), 2
+    	) if risk_scores else 0
 	}
 
     # Save JSON report
