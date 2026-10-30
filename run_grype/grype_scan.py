@@ -5,17 +5,18 @@
 
 ###all you have to do is run python grpe_scan.py in the directory 
 
-
 import subprocess
+import sys
 
-print("Grype Dependency Scanner")
+print("Grype Container Vulnerability Scanner")
+print("-------------------------------------")
 print("1. Scan all vulnerabilities")
 print("2. Critical")
 print("3. High")
 print("4. Medium")
 print("5. Low")
 
-choice = input("Choose severity: ")
+choice = input("Choose severity: ").strip()
 
 severity = {
     "2": "critical",
@@ -23,15 +24,31 @@ severity = {
     "4": "medium",
     "5": "low"
 }
-#sets up the directory in the form that grype can read 
-command = ["grype", f"dir:{__import__('os').getcwd()}"]
 
-#build in --fail on command, and --onlyfixed filters out the other levels of depencency 
+# Docker image being scanned
+image = "study-room-test:latest"
+
+# Build Grype command
+command = ["grype", image]
+
+# Set failure threshold if a severity is selected
 if choice in severity:
-    command += ["--only-fixed"] if False else []
     command += ["--fail-on", severity[choice]]
 elif choice != "1":
     print("Invalid choice.")
-    exit()
+    sys.exit(1)
 
-subprocess.run(command)
+print(f"\nScanning Docker image: {image}")
+print("Running Grype...\n")
+
+# Execute scan
+result = subprocess.run(command)
+
+# Display scan status
+if result.returncode == 0:
+    print("\nScan completed successfully.")
+else:
+    print("\nScan completed with a failure status.")
+    print("This may indicate vulnerabilities met the selected threshold.")
+
+sys.exit(result.returncode)
