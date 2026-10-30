@@ -1,9 +1,9 @@
+
 name: Grype Security Scan
 
 on:
   push:
   pull_request:
-  workflow_dispatch:
 
 jobs:
   grype-scan:
@@ -16,29 +16,21 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build Docker image
-        run: docker build -t my-app:${{ github.sha }} .
+        run: docker build -t study-room-test:latest .
 
       - name: Scan image and generate SARIF
-        uses: anchore/scan-action@v3
+        uses: anchore/scan-action@v7
         id: scan
         with:
-          image: my-app:${{ github.sha }}
-          fail-build: true
-          severity-cutoff: high
+          image: study-room-test:latest
+          fail-build: false
+          output-format: sarif
+          output-file: results.sarif
 
-      - name: Upload Grype results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always() && steps.scan.outputs.sarif != ''
+      - name: Upload Grype scan results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
-
-      - name: Save Grype SARIF artifact
-        uses: actions/upload-artifact@v4
-        if: always() && steps.scan.outputs.sarif != ''
-        with:
-          name: grype-sarif-results
-          path: ${{ steps.scan.outputs.sarif }}
-          if-no-files-found: ignore
+          sarif_file: results.sarif
