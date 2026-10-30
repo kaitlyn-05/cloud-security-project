@@ -18,20 +18,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Syft
-        uses: anchore/sbom-action/download-syft@v0
-
       - name: Build Docker image
         run: docker build -t my-app:${{ github.sha }} .
 
-      - name: Generate SBOM
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Generate SBOM from Docker image
         run: |
-              syft scan my-app:${{ github.sha }} \
-                -o cyclonedx-json=sbom.cdx.json
+          syft scan my-app:${{ github.sha }} \
+            -o cyclonedx-json=sbom.cdx.json
 
       - name: Upload SBOM
         uses: actions/upload-artifact@v4
         with:
           name: project-sbom
           path: sbom.cdx.json
-          if-no-files-found: error    
+          if-no-files-found: error
