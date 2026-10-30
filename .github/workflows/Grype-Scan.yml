@@ -21,16 +21,37 @@ jobs:
       - name: Build Docker image
         run: docker build -t study-room-test:latest .
 
+      # Generate SARIF for GitHub Security
       - name: Scan image and generate SARIF
         uses: anchore/scan-action@v7
-        id: scan
+        id: scan-sarif
         with:
           image: study-room-test:latest
           fail-build: false
           output-format: sarif
           output-file: results.sarif
 
+      # Upload SARIF to GitHub Security
       - name: Upload Grype scan results to GitHub Security
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results.sarif
+
+      # Generate regular JSON for Python analysis
+      - name: Scan image and generate JSON
+        uses: anchore/scan-action@v7
+        id: scan-json
+        with:
+          image: study-room-test:latest
+          fail-build: false
+          output-format: json
+          output-file: grype-results.json
+
+      # Save JSON report as downloadable artifact
+      - name: Save Grype JSON report
+        uses: actions/upload-artifact@v4
+        with:
+          name: grype-json-report
+          path: grype-results.json
+          if-no-files-found: error
+          retention-days: 30
