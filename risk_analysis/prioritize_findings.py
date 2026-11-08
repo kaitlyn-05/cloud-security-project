@@ -339,7 +339,7 @@ def main():
     print(f"Unique combined findings: {len(results)}")
     print(f"Detected by both scanners: {agreement_count}")
     print(f"SBOM components: {component_count}")
-	print(f"Unique CVE IDs: {summary['unique_cve_ids']}")
+    print(f"Unique CVE IDs: {summary['unique_cve_ids']}")
     print(f"Grype findings: {summary['grype_findings']}")
     print(f"Trivy findings: {summary['trivy_findings']}")
     print(f"Fix versions reported: {summary['fix_version_reported']}")
